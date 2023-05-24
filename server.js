@@ -1,4 +1,5 @@
 const express = require('express');
+var cors = require('cors')
 const app = express();
 const riceVarietyRoutes = require('./routes/riceVarietyRoutes');
 const riceDiseaseRoutes = require('./routes/riceDiseaseRoutes');
@@ -6,6 +7,7 @@ const nutrientDeficiencyRoutes = require('./routes/nutrientDeficiencyRoutes');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 
+app.use(cors())
 app.use(express.json());
 
 // Routes
