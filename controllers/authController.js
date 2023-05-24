@@ -6,7 +6,7 @@ const BlacklistedToken = require('../models/blacklistedToken');
 const { Sequelize } = require('sequelize');
 
 const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
 
   try {
     // Check if the username or email already exists
@@ -21,19 +21,14 @@ const registerUser = async (req, res) => {
 
     // Create a new user
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const newUser = await User.create({ username, email, password: hashedPassword });
+    const newUser = await User.create({ username, email, password: hashedPassword, role });
 
     // Generate access token
-    const accessToken = jwt.sign({ id: newUser.id, username: newUser.username }, config.jwt.accessTokenSecret, {
+    const accessToken = jwt.sign({ id: newUser.id, username: newUser.username, role: newUser.role }, config.jwt.accessTokenSecret, {
       expiresIn: config.jwt.accessTokenExpiresIn,
     });
 
-    // Generate refresh token
-    const refreshToken = jwt.sign({ id: newUser.id, username: newUser.username }, config.jwt.refreshTokenSecret, {
-      expiresIn: config.jwt.refreshTokenExpiresIn,
-    });
-
-    res.json({ accessToken, refreshToken });
+    res.json({ accessToken });
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -57,16 +52,11 @@ const loginUser = async (req, res) => {
     }
 
     // Generate access token
-    const accessToken = jwt.sign({ id: user.id, username: user.username }, config.jwt.accessTokenSecret, {
+    const accessToken = jwt.sign({ id: user.id, username: user.username, role: user.role  }, config.jwt.accessTokenSecret, {
       expiresIn: config.jwt.accessTokenExpiresIn,
     });
 
-    // Generate refresh token
-    const refreshToken = jwt.sign({ id: user.id, username: user.username }, config.jwt.refreshTokenSecret, {
-      expiresIn: config.jwt.refreshTokenExpiresIn,
-    });
-
-    res.json({ accessToken, refreshToken });
+    res.json({ accessToken });
   } catch (error) {
     console.error('Error logging in user:', error);
     res.status(500).json({ error: 'Internal server error' });
