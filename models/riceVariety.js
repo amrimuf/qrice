@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const RiceVariety = sequelize.define('RiceVariety', {
+const RiceVariety = sequelize.define('rice_variety', {
 name: {
 type: DataTypes.STRING,
 allowNull: false,

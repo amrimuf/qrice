@@ -9,7 +9,7 @@ const authRoutes = require('./routes/authRoutes');
 app.use(express.json());
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api', authRoutes);
 app.use('/api', riceVarietyRoutes);
 app.use('/api', riceDiseaseRoutes);
 app.use('/api', nutrientDeficiencyRoutes);

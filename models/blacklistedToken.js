@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const BlacklistedToken = sequelize.define('BlacklistedToken', {
+const BlacklistedToken = sequelize.define('blacklisted_token', {
   token: {
     type: DataTypes.STRING,
     allowNull: false,

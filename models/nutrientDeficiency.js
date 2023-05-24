@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const NutrientDeficiency = sequelize.define('NutrientDeficiency', {
+const NutrientDeficiency = sequelize.define('nutrient_deficiency', {
 name: {
 type: DataTypes.STRING,
 allowNull: false,
