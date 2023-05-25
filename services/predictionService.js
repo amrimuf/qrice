@@ -14,7 +14,7 @@ async function predictionService(file, model, categoryId, userId) {
 
     return result;
   } catch (error) {
-    throw new Error('Failed to upload image and process prediction');
+    return { success: false, error: error.message };
   }
 }
 

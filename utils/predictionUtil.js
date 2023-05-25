@@ -11,46 +11,54 @@ const keyFilename = './service-account-key.json';
 const storage = new Storage({ keyFilename });
 
 async function uploadToBucket(file) {
-  const bucketName = process.env.BUCKET_NAME;  // Replace with your actual bucket name
-  const uniqueFilename = `${Date.now()}_${file.originalname}`;
+  try {
+    const bucketName = process.env.BUCKET_NAME; // Replace with your actual bucket name
+    const uniqueFilename = `${Date.now()}_${file.originalname}`;
 
-  const bucket = storage.bucket(bucketName);
-  const fileBlob = bucket.file(uniqueFilename);
+    const bucket = storage.bucket(bucketName);
+    const fileBlob = bucket.file(uniqueFilename);
 
-  await fileBlob.save(file.buffer, {
-    metadata: {
-      contentType: file.mimetype,
-    },
-  });
+    await fileBlob.save(file.buffer, {
+      metadata: {
+        contentType: file.mimetype,
+      },
+    });
 
-  return uniqueFilename;
+    return uniqueFilename;
+  } catch (error) {
+    throw new Error('Failed to upload file to bucket');
+  }
 }
 
 async function callPredictionAPI(model, imageFilename) {
-  
-  const payload = {
-    model: model,
-    imageFilename: imageFilename,
-  };
+  try {
+    const payload = {
+      model: model,
+      imageFilename: imageFilename,
+    };
 
-  let predictionResult = '';
+    let predictionResult = '';
 
-  // Make the API call to the specific machine learning model
-  // Replace the API endpoint and request payload with your own implementation
-  if (model === 'riceVariety') {
-    const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload)
-    predictionResult = response.data.prediction;
-  } else if (model === 'nutrientDeficiency') {
-    const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload)
-    predictionResult = response.data.prediction;
-  } else if (model === 'riceDisease') {
-    const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload)
-    predictionResult = response.data.prediction;
+    // Make the API call to the specific machine learning model
+    // Replace the API endpoint and request payload with your own implementation
+    if (model === 'riceVariety') {
+      const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload);
+      predictionResult = response.data.prediction;
+    } else if (model === 'nutrientDeficiency') {
+      const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload);
+      predictionResult = response.data.prediction;
+    } else if (model === 'riceDisease') {
+      const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload);
+      predictionResult = response.data.prediction;
+    }
+    // Add more if conditions for other models
+
+    return predictionResult;
+  } catch (error) {
+    throw new Error('Failed to call prediction API');
   }
-  // Add more if conditions for other models
-
-  return predictionResult;
 }
+
 async function saveToDatabase(model, categoryId, userId, imageFilename, predictionResult) {
   try {
     await sequelize.sync(); // Ensure the database tables are created
