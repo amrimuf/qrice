@@ -12,9 +12,9 @@ async function predictionService(file, model, categoryId, userId) {
     // Save the result and image filename to the database
     const result = await saveToDatabase(model, categoryId, userId, imageFilename, predictionResult);
 
-    return result;
+    return result
   } catch (error) {
-    return { success: false, error: error.message };
+    return { error: error.message };
   }
 }
 

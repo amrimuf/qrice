@@ -37,7 +37,14 @@ async function predict(req, res) {
       // Call the image service to handle the upload and prediction
       const result = await predictionService(file, model, categoryId, userId);
 
+      if (result.error) {
+        // Error occurred during prediction
+        return res.status(500).json({ error: result.error });
+      }
+
+      // Successful prediction
       res.status(200).json({ success: true, result });
+      
     });
   } catch (error) {
     console.error(error);

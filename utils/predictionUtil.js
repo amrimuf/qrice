@@ -1,6 +1,9 @@
 const { Storage } = require('@google-cloud/storage');
 const axios = require('axios');
 const sequelize = require('../config/database');
+const RiceVarieties = require('../models/riceVariety')
+const RiceDiseases = require('../models/riceDisease')
+const NutrientDeficiencies = require('../models/nutrientDeficiency')
 const RiceVarietyPredictionHistory = require('../models/riceVarietyPredictionHistory');
 const RiceDiseasePredictionHistory = require('../models/riceDiseasePredictionHistory');
 const NutrientDeficiencyPredictionHistory = require('../models/nutrientDeficiencyPredictionHistory');
@@ -12,7 +15,7 @@ const storage = new Storage({ keyFilename });
 
 async function uploadToBucket(file) {
   try {
-    const bucketName = process.env.BUCKET_NAME; // Replace with your actual bucket name
+    const bucketName = process.env.BUCKET_NAME; 
     const uniqueFilename = `${Date.now()}_${file.originalname}`;
 
     const bucket = storage.bucket(bucketName);
@@ -39,8 +42,9 @@ async function callPredictionAPI(model, imageFilename) {
 
     let predictionResult = '';
 
-    // Make the API call to the specific machine learning model
-    // Replace the API endpoint and request payload with your own implementation
+    // BACK HERE: based on model value, call the corresponding api endpoint
+    // predictionResult not only prediction name, but also performance 
+
     if (model === 'riceVariety') {
       const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload);
       predictionResult = response.data.prediction;
@@ -51,7 +55,6 @@ async function callPredictionAPI(model, imageFilename) {
       const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload);
       predictionResult = response.data.prediction;
     }
-    // Add more if conditions for other models
 
     return predictionResult;
   } catch (error) {
@@ -60,29 +63,45 @@ async function callPredictionAPI(model, imageFilename) {
 }
 
 async function saveToDatabase(model, categoryId, userId, imageFilename, predictionResult) {
+
+  // BACK HERE: categoryId migbt be deleted later
+  // not working because the machine learning model still not ready yet
+
   try {
     await sequelize.sync(); // Ensure the database tables are created
 
     let history;
 
     if (model === 'riceVariety') {
+      const riceVariety = await RiceVarieties.findOne({
+        where: { name: predictionResult },
+      });
+
       history = await RiceVarietyPredictionHistory.create({
         userId,
-        rice_variety_id: categoryId,
+        rice_variety_id: riceVariety.id,
         imageFilename,
         predictionResult,
       });
     } else if (model === 'nutrientDeficiency') {
+      const nutrientDeficiency = await NutrientDeficiencies.findOne({
+        where: { name: predictionResult },
+      });
+
       history = await NutrientDeficiencyPredictionHistory.create({
         userId,
-        nutrient_deficiency_id: categoryId,
+        nutrient_deficiency_id: nutrientDeficiency.id,
         imageFilename,
         predictionResult,
       });
     } else if (model === 'riceDisease') {
+      const riceDisease = await RiceDiseases.findOne({
+        where: { name: predictionResult },
+      });
+
       history = await RiceDiseasePredictionHistory.create({
         userId,
-        rice_disease_id: categoryId,
+        rice_disease_id: riceDisease.id,
         imageFilename,
         predictionResult,
       });
