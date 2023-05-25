@@ -11,24 +11,16 @@ steps:
       - 'gs://env-prod/service-account-key.json'
       - './service-account-key.json'
 
-  # Build the container image
+  # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'q-rice', '.']
+    args: ['build', '-t', 
+           'asia-southeast2-docker.pkg.dev/q-rice/q-rice-repo/q-rice-image:$SHORT_SHA', 
+           '.']
     
-  # Push the container image to Container Registry
+    # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'tag'
-      - 'q-rice'
-      - 'gcr.io/q-rice/q-rice'
-
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - 'auth'
-      - 'configure-docker'
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/q-rice/q-rice']
+    args: ['push', 
+           'asia-southeast2-docker.pkg.dev/q-rice/q-rice-repo/q-rice-image:$SHORT_SHA']
 
   # Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -37,7 +29,7 @@ steps:
       - 'deploy'
       - 'q-rice'
       - '--image'
-      - 'gcr.io/q-rice/q-rice'
+      - 'asia-southeast2-docker.pkg.dev/q-rice/q-rice-repo/q-rice-image:$SHORT_SHA'
       - '--region'
       - 'us-central1'
       - '--platform'
