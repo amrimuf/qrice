@@ -1,4 +1,16 @@
 steps:
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args:
+      - 'cp'
+      - 'gs://env-prod/.env'
+      - './.env'
+      
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args:
+      - 'cp'
+      - 'gs://env-prod/service-account-key.json'
+      - './service-account-key.json'
+
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/q-rice/q-rice', '.']
