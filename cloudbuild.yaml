@@ -13,7 +13,7 @@ steps:
 
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/q-rice/q-rice', '.']
+    args: ['build', '-t', 'q-rice', '.']
     
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
