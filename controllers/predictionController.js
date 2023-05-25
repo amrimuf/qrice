@@ -26,6 +26,12 @@ async function predict(req, res) {
       // Access other form fields if needed
       const { model, categoryId, userId } = req.body;
 
+        // Validate the model value
+        const validModels = ['riceVariety', 'nutrientDeficiency', 'riceDisease'];
+        if (!validModels.includes(model)) {
+          return res.status(400).json({ error: 'Invalid model value.' });
+        }
+
       // Call the image service to handle the upload and prediction
       const result = await predictionService(file, model, categoryId, userId);
 

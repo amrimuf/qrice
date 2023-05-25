@@ -13,10 +13,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      categoryId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -35,6 +31,36 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      rice_variety_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'rice_varieties',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      rice_disease_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'rice_diseases',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      nutrient_deficiency_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'nutrient_deficiencies',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -45,42 +71,6 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-    });
-
-    await queryInterface.addConstraint('histories', {
-      fields: ['categoryId'],
-      type: 'foreign key',
-      name: 'fk_histories_rice_varieties',
-      references: {
-        table: 'rice_varieties',
-        field: 'id',
-      },
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    });
-
-    await queryInterface.addConstraint('histories', {
-      fields: ['categoryId'],
-      type: 'foreign key',
-      name: 'fk_histories_nutrient_deficiencies',
-      references: {
-        table: 'nutrient_deficiencies',
-        field: 'id',
-      },
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    });
-
-    await queryInterface.addConstraint('histories', {
-      fields: ['categoryId'],
-      type: 'foreign key',
-      name: 'fk_histories_rice_diseases',
-      references: {
-        table: 'rice_diseases',
-        field: 'id',
-      },
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
     });
   },
 

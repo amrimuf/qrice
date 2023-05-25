@@ -34,10 +34,13 @@ async function callPredictionAPI(model, imageFilename) {
 
   // Make the API call to the specific machine learning model
   // Replace the API endpoint and request payload with your own implementation
-  if (model === 'model1') {
+  if (model === 'riceVariety') {
     const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload)
     predictionResult = response.data.prediction;
-  } else if (model === 'model2') {
+  } else if (model === 'nutrientDeficiency') {
+    const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload)
+    predictionResult = response.data.prediction;
+  } else if (model === 'riceDisease') {
     const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload)
     predictionResult = response.data.prediction;
   }
@@ -45,16 +48,29 @@ async function callPredictionAPI(model, imageFilename) {
 
   return predictionResult;
 }
-
 async function saveToDatabase(model, categoryId, userId, imageFilename, predictionResult) {
   try {
     await sequelize.sync(); // Ensure the database tables are created
 
+    let riceVarietyId = null;
+    let nutrientDeficiencyId = null;
+    let riceDiseaseId = null;
+
+    if (model === 'riceVariety') {
+      riceVarietyId = categoryId;
+    } else if (model === 'nutrientDeficiency') {
+      nutrientDeficiencyId = categoryId;
+    } else if (model === 'riceDisease') {
+      riceDiseaseId = categoryId;
+    }
+
     // Save the history record to the database
     const history = await History.create({
       model,
-      categoryId,
       userId,
+      rice_variety_id: riceVarietyId,
+      nutrient_deficiency_id: nutrientDeficiencyId,
+      rice_disease_id: riceDiseaseId,
       imageFilename,
       predictionResult,
     });

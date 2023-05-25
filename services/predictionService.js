@@ -2,6 +2,7 @@ const { uploadToBucket, callPredictionAPI, saveToDatabase } = require('../utils/
 
 async function predictionService(file, model, categoryId, userId) {
   try {
+
     // Upload the file to the bucket and get the unique filename
     const imageFilename = await uploadToBucket(file);
 

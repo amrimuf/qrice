@@ -17,13 +17,21 @@ const History = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    categoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    rice_variety_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    nutrient_deficiency_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    rice_disease_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     imageFilename: {
       type: DataTypes.STRING,
@@ -50,8 +58,8 @@ const History = sequelize.define(
 );
 
 History.belongsTo(User, { foreignKey: 'userId' });
-History.belongsTo(RiceVariety, { foreignKey: 'categoryId', as: 'riceVariety' });
-History.belongsTo(NutrientDeficiency, { foreignKey: 'categoryId', as: 'nutrientDeficiency' });
-History.belongsTo(RiceDisease, { foreignKey: 'categoryId', as: 'riceDisease' });
+History.belongsTo(RiceVariety, { foreignKey: 'rice_variety_id', as: 'riceVariety' });
+History.belongsTo(NutrientDeficiency, { foreignKey: 'nutrient_deficiency_id', as: 'nutrientDeficiency' });
+History.belongsTo(RiceDisease, { foreignKey: 'rice_disease_id', as: 'riceDisease' });
 
 module.exports = History;
