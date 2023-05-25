@@ -2,40 +2,17 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('histories', {
+    await queryInterface.createTable('rice_disease_history', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false,
-      },
-      model: {
-        type: Sequelize.STRING,
-        allowNull: false,
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      imageFilename: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      predictionResult: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      rice_variety_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'rice_varieties',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -49,17 +26,15 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
       },
-      nutrient_deficiency_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'nutrient_deficiencies',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+      imageFilename: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      predictionResult: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -72,9 +47,33 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
+
+    await queryInterface.addConstraint('rice_disease_history', {
+      fields: ['userId'],
+      type: 'foreign key',
+      name: 'fk_rice_disease_history_userId',
+      references: {
+        table: 'users',
+        field: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    });
+
+    await queryInterface.addConstraint('rice_disease_history', {
+      fields: ['rice_disease_id'],
+      type: 'foreign key',
+      name: 'fk_rice_disease_history_riceDiseaseId',
+      references: {
+        table: 'rice_diseases',
+        field: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('histories');
-  }
+    await queryInterface.dropTable('rice_disease_history');
+  },
 };

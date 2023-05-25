@@ -1,5 +1,7 @@
 const { predictionService } = require('../services/predictionService');
-const History = require('../models/history');
+const RiceVarietyPredictionHistory = require('../models/riceVarietyPredictionHistory');
+const RiceDiseasePredictionHistory = require('../models/riceDiseasePredictionHistory');
+const NutrientDeficiencyPredictionHistory = require('../models/nutrientDeficiencyPredictionHistory');
 
 const multer = require('multer');
 
@@ -45,12 +47,18 @@ async function predict(req, res) {
 
 async function getPredictions(req, res) {
   try {
-  const history = await History.findAll();
-  res.json(history);
+    const riceVarietyHistories = await RiceVarietyPredictionHistory.findAll();
+    const riceDiseaseHistories = await RiceDiseasePredictionHistory.findAll();
+    const nutrientDeficiencyHistories = await NutrientDeficiencyPredictionHistory.findAll();
+
+    const allHistories = [...riceVarietyHistories, ...riceDiseaseHistories, ...nutrientDeficiencyHistories];
+
+    res.json(allHistories);
   } catch (error) {
-  res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
-};
+}
+
 
 module.exports = {
   predict,

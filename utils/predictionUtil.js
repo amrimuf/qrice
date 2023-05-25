@@ -1,7 +1,10 @@
 const { Storage } = require('@google-cloud/storage');
 const axios = require('axios');
 const sequelize = require('../config/database');
-const History = require('../models/history');
+const RiceVarietyPredictionHistory = require('../models/riceVarietyPredictionHistory');
+const RiceDiseasePredictionHistory = require('../models/riceDiseasePredictionHistory');
+const NutrientDeficiencyPredictionHistory = require('../models/nutrientDeficiencyPredictionHistory');
+
 require('dotenv').config();
 
 const keyFilename = './service-account-key.json';
@@ -52,28 +55,32 @@ async function saveToDatabase(model, categoryId, userId, imageFilename, predicti
   try {
     await sequelize.sync(); // Ensure the database tables are created
 
-    let riceVarietyId = null;
-    let nutrientDeficiencyId = null;
-    let riceDiseaseId = null;
+    let history;
 
     if (model === 'riceVariety') {
-      riceVarietyId = categoryId;
+      history = await RiceVarietyPredictionHistory.create({
+        userId,
+        rice_variety_id: categoryId,
+        imageFilename,
+        predictionResult,
+      });
     } else if (model === 'nutrientDeficiency') {
-      nutrientDeficiencyId = categoryId;
+      history = await NutrientDeficiencyPredictionHistory.create({
+        userId,
+        nutrient_deficiency_id: categoryId,
+        imageFilename,
+        predictionResult,
+      });
     } else if (model === 'riceDisease') {
-      riceDiseaseId = categoryId;
+      history = await RiceDiseasePredictionHistory.create({
+        userId,
+        rice_disease_id: categoryId,
+        imageFilename,
+        predictionResult,
+      });
+    } else {
+      throw new Error('Invalid model type');
     }
-
-    // Save the history record to the database
-    const history = await History.create({
-      model,
-      userId,
-      rice_variety_id: riceVarietyId,
-      nutrient_deficiency_id: nutrientDeficiencyId,
-      rice_disease_id: riceDiseaseId,
-      imageFilename,
-      predictionResult,
-    });
 
     return history;
 

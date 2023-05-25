@@ -2,8 +2,6 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const User = require('./user');
 const RiceVariety = require('./riceVariety');
-const NutrientDeficiency = require('./nutrientDeficiency');
-const RiceDisease = require('./riceDisease');
 
 const History = sequelize.define(
   'History',
@@ -13,23 +11,11 @@ const History = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    model: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     rice_variety_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    nutrient_deficiency_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    rice_disease_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
@@ -53,13 +39,11 @@ const History = sequelize.define(
     },
   },
   {
-    tableName: 'histories',
+    tableName: 'rice_variety_history',
   }
 );
 
 History.belongsTo(User, { foreignKey: 'userId' });
 History.belongsTo(RiceVariety, { foreignKey: 'rice_variety_id', as: 'riceVariety' });
-History.belongsTo(NutrientDeficiency, { foreignKey: 'nutrient_deficiency_id', as: 'nutrientDeficiency' });
-History.belongsTo(RiceDisease, { foreignKey: 'rice_disease_id', as: 'riceDisease' });
 
 module.exports = History;
