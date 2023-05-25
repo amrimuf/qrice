@@ -4,7 +4,7 @@ steps:
       - 'cp'
       - 'gs://env-prod/.env'
       - './.env'
-      
+
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - 'cp'
@@ -16,6 +16,17 @@ steps:
     args: ['build', '-t', 'gcr.io/q-rice/q-rice', '.']
     
   # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'tag'
+      - 'q-rice'
+      - 'gcr.io/q-rice/q-rice'
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'auth'
+      - 'configure-docker'
+
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/q-rice/q-rice']
 
