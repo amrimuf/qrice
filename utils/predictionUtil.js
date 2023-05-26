@@ -53,7 +53,7 @@ async function callPredictionAPI(model, imageFilename) {
       const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload);
       predictionResult = response.data.prediction;
     } else if (model === 'riceDisease') {
-      const response = await axios.post('https://us-central1-q-rice.cloudfunctions.net/prediction', { imageFilename });
+      const response = await axios.post('https://q-rice.et.r.appspot.com/', { imageFilename });
       predictionResult = response.data.prediction;
     }
 
@@ -65,8 +65,7 @@ async function callPredictionAPI(model, imageFilename) {
 
 async function saveToDatabase(model, categoryId, userId, imageFilename, predictionResult) {
 
-  // BACK HERE: categoryId migbt be deleted later
-  // not working because the machine learning model still not ready yet
+  // BACK HERE: categoryId migbt be deleted laters
 
   try {
     await sequelize.sync(); // Ensure the database tables are created
