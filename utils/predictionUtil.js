@@ -44,6 +44,7 @@ async function callPredictionAPI(model, imageFilename) {
 
     // BACK HERE: based on model value, call the corresponding api endpoint
     // predictionResult not only prediction name, but also performance 
+    // only for riceDisease
 
     if (model === 'riceVariety') {
       const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload);
@@ -52,7 +53,7 @@ async function callPredictionAPI(model, imageFilename) {
       const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload);
       predictionResult = response.data.prediction;
     } else if (model === 'riceDisease') {
-      const response = await axios.post('https://asia-southeast2-q-rice.cloudfunctions.net/mock-prediction', payload);
+      const response = await axios.post('https://us-central1-q-rice.cloudfunctions.net/prediction', { imageFilename });
       predictionResult = response.data.prediction;
     }
 
