@@ -39,7 +39,7 @@ const History = sequelize.define(
     },
   },
   {
-    tableName: 'nutrient-deficiency-history',
+    tableName: 'nutrient_deficiency_history',
   }
 );
 

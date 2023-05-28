@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('nutrient-deficiency-history', {
+    await queryInterface.createTable('nutrient_deficiency_history', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -48,7 +48,7 @@ module.exports = {
       },
     });
 
-    await queryInterface.addConstraint('nutrient-deficiency-history', {
+    await queryInterface.addConstraint('nutrient_deficiency_history', {
       fields: ['userId'],
       type: 'foreign key',
       name: 'fk_histories_userId',
@@ -60,7 +60,7 @@ module.exports = {
       onDelete: 'CASCADE',
     });
 
-    await queryInterface.addConstraint('nutrient-deficiency-history', {
+    await queryInterface.addConstraint('nutrient_deficiency_history', {
       fields: ['nutrient_deficiency_id'],
       type: 'foreign key',
       name: 'fk_histories_nutrientDeficiencyId',
@@ -74,6 +74,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('nutrient-deficiency-history');
+    await queryInterface.dropTable('nutrient_deficiency_history');
   },
 };

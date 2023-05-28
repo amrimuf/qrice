@@ -3,23 +3,28 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Check the environment variable to determine if seeding should be performed
-    const runSeed = process.env.RUN_SEED === 'true';
+    const runSeed = process.env.RUN_SEED ? process.env.RUN_SEED === 'true' : 'true';
 
     if (runSeed) {
       await queryInterface.bulkInsert('nutrient_deficiencies', [
         {
-          name: 'Deficiency 1',
-          symptoms: 'Symptoms for Deficiency 1',
+          name: 'Nitrogen',
+          symptoms: 'Symptoms for Nitrogen',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: 'Deficiency 2',
-          symptoms: 'Symptoms for Deficiency 2',
+          name: 'Phosphorus',
+          symptoms: 'Symptoms for Phosphorus',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        // Add more nutrient deficiency data objects as needed
+        {
+          name: 'Potassium',
+          symptoms: 'Symptoms for Potassium',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ], {});
     }
   },

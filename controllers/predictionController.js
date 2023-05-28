@@ -24,9 +24,10 @@ async function predict(req, res) {
 
       // Access the file object
       const file = req.file;
+      const userId = req.user.id;
 
       // Access other form fields if needed
-      const { model, categoryId, userId } = req.body;
+      const { model } = req.body;
 
         // Validate the model value
         const validModels = ['riceVariety', 'nutrientDeficiency', 'riceDisease'];
@@ -35,7 +36,7 @@ async function predict(req, res) {
         }
 
       // Call the image service to handle the upload and prediction
-      const result = await predictionService(file, model, categoryId, userId);
+      const result = await predictionService(file, model, userId);
 
       if (result.error) {
         // Error occurred during prediction

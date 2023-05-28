@@ -10,3 +10,17 @@ exports.getAllUsers = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+exports.getUser = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const user = await User.findByPk(id);
+      if (user) {
+      res.json(user);
+      } else {
+      res.status(404).json({ error: 'User not found' });
+      }
+  } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+  }
+}

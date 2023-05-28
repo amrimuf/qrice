@@ -5,6 +5,7 @@ const nutrientDeficiencyController = require('../controllers/nutrientDeficiencyC
 const { isAdmin, isLogin, isLogout } = require('../middlewares/authMiddleware');
 
 router.get('/nutrient-deficiencies', isLogin, isLogout, nutrientDeficiencyController.getAllNutrientDeficiencies);
+router.get('/nutrient-deficiencies/:id', isLogin, isLogout, nutrientDeficiencyController.getNutrientDeficiency);
 router.post('/admin/nutrient-deficiencies', isLogin, isLogout, isAdmin, nutrientDeficiencyController.createNutrientDeficiency);
 
 module.exports = router;

@@ -3,23 +3,40 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Check the environment variable to determine if seeding should be performed
-    const runSeed = process.env.RUN_SEED === 'true';
+    const runSeed = process.env.RUN_SEED ? process.env.RUN_SEED === 'true' : 'true';
 
     if (runSeed) {
       await queryInterface.bulkInsert('rice_varieties', [
         {
-          name: 'Variety 1',
-          description: 'Description for Variety 1',
+          name: 'Arborio',
+          description: 'Description for Arborio',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: 'Variety 2',
-          description: 'Description for Variety 2',
+          name: 'Basmati',
+          description: 'Description for Basmati',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        // Add more rice variety data objects as needed
+        {
+          name: 'Ipsala',
+          description: 'Description for Ipsala',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: 'Jasmine',
+          description: 'Description for Jasmine',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: 'Karacadag',
+          description: 'Description for Karacadag',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ], {});
     }
   },

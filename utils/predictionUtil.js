@@ -63,9 +63,7 @@ async function callPredictionAPI(model, imageFilename) {
   }
 }
 
-async function saveToDatabase(model, categoryId, userId, imageFilename, predictionResult) {
-
-  // BACK HERE: categoryId migbt be deleted laters
+async function saveToDatabase(model, userId, imageFilename, predictionResult) {
 
   try {
     await sequelize.sync(); // Ensure the database tables are created

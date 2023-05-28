@@ -30,7 +30,6 @@ app.use('/api', nutrientDeficiencyRoutes);
 app.use('/api', userRoutes);
 app.use('/api', predictionRoutes);
 
-
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {

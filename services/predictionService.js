@@ -1,6 +1,6 @@
 const { uploadToBucket, callPredictionAPI, saveToDatabase } = require('../utils/predictionUtil');
 
-async function predictionService(file, model, categoryId, userId) {
+async function predictionService(file, model, userId) {
   try {
 
     // Upload the file to the bucket and get the unique filename
@@ -10,7 +10,7 @@ async function predictionService(file, model, categoryId, userId) {
     const predictionResult = await callPredictionAPI(model, imageFilename);
 
     // Save the result and image filename to the database
-    const result = await saveToDatabase(model, categoryId, userId, imageFilename, predictionResult);
+    const result = await saveToDatabase(model, userId, imageFilename, predictionResult);
 
     return result
   } catch (error) {

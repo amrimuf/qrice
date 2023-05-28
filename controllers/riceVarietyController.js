@@ -20,3 +20,17 @@ exports.createRiceVariety = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+exports.getRiceVariety = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const riceVariety = await RiceVariety.findByPk(id);
+        if (riceVariety) {
+        res.json(riceVariety);
+        } else {
+        res.status(404).json({ error: 'Rice variety not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}

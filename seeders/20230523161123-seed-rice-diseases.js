@@ -3,23 +3,46 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Check the environment variable to determine if seeding should be performed
-    const runSeed = process.env.RUN_SEED === 'true';
+    const runSeed = process.env.RUN_SEED ? process.env.RUN_SEED === 'true' : 'true';
 
     if (runSeed) {
       await queryInterface.bulkInsert('rice_diseases', [
         {
-          name: 'Disease 1',
-          symptoms: 'Symptoms for Disease 1',
+          name: 'Bacterial Leaf Blight',
+          symptoms: 'Symptoms for Leaf Blight',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: 'Disease 2',
-          symptoms: 'Symptoms for Disease 2',
+          name: 'Healthy',
+          symptoms: 'Symptoms for Healthy',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        // Add more rice disease data objects as needed
+        {
+          name: 'Leaf Blast',
+          symptoms: 'Symptoms for Lead Blast',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: 'Leaf Scald',
+          symptoms: 'Symptoms for Leaf Scald',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: 'Brown Spot',
+          symptoms: 'Symptoms for Brown Spot',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: 'Narrow Brown Spot',
+          symptoms: 'Symptoms for Narrow Brown Spot',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ], {});
     }
   },
