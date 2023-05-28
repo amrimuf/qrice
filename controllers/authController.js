@@ -4,6 +4,8 @@ const config = require('../config/jwt');
 const User = require('../models/user');
 const BlacklistedToken = require('../models/blacklistedToken');
 const { Sequelize } = require('sequelize');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 const registerUser = async (req, res) => {
   const { username, email, password, role } = req.body;
@@ -87,8 +89,75 @@ const logoutUser = async (req, res) => {
   }
 };
 
+const googleAuthCallback = async (accessToken, refreshToken, profile, done) => {
+  try {
+    // Find or create a user based on the Google profile
+    const [user, created] = await User.findOrCreate({
+      where: { googleId: profile.id },
+      defaults: {
+        username: profile.displayName,
+        email: profile.emails[0].value,
+        password: '',
+        role: 'member'
+      }
+    });
+
+    if (user) {
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  } catch (error) {
+    return done(error, false);
+  }
+};
+
+const authenticateGoogle = passport.authenticate('google', {
+  scope: ['profile', 'email'],
+});
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: '/api/auth/google/callback'
+    },
+    googleAuthCallback
+  )
+);
+
+// Middleware for handling the OAuth callback
+const handleOAuthCallback = (req, res, next) => {
+  passport.authenticate('google', { session: false }, async (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error', details: err.message });
+    }
+
+    if (!user) {
+      return res.status(401).json({ error: 'Authentication failed' });
+    }
+
+    try {
+      // Generate access token using JWT or perform necessary actions with user profile
+      const accessToken = jwt.sign({ id: user.id, email: user.email }, config.jwt.accessTokenSecret, {
+        expiresIn: config.jwt.accessTokenExpiresIn,
+      });
+
+      // Send the access token as a response
+      res.json({ accessToken });
+
+    } catch (error) {
+      return res.status(500).json({ error: 'Internal server error', details: error.message });
+    }
+  })(req, res, next);
+};
+
 module.exports = {
   registerUser,
   loginUser,
-  logoutUser
+  logoutUser,
+  authenticateGoogle,
+  handleOAuthCallback,
+  googleAuthCallback
 };

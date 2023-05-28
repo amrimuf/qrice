@@ -28,6 +28,10 @@ const User = sequelize.define(
       allowNull: false,
       defaultValue: 'member',
     },
+    googleId: {
+      type: DataTypes.STRING, // Assuming googleId is of string type
+      allowNull: true, // Set allowNull to true if it's not required for all users
+    },
   },
   {
     timestamps: true,

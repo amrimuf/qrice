@@ -28,6 +28,10 @@ module.exports = {
         allowNull: false,
         // defaultValue: 'member',
       },
+      googleId: {
+        type: Sequelize.STRING, // Assuming googleId is of string type
+        allowNull: true, // Set allowNull to true if it's not required for all users
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
