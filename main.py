@@ -7,9 +7,7 @@ from flask import Flask, request, jsonify
 from flask_restful import Api, Resource
 from flask_cors import CORS
 
-# Specify your GCS bucket name and image bucket name
-bucket_name = 'env-prod'
-images_bucket_name = 'q-rice'
+bucket_name = 'q-rice'
 
 app = Flask(__name__)
 api = Api(app)
@@ -37,9 +35,9 @@ class PredictResource(Resource):
         # Create the directory if it doesn't exist
         os.makedirs('/tmp/', exist_ok=True)
 
-         # Download the model file to a temporary location
+        # Download the model file to a temporary location
         temp_model_path = f'/tmp/{model_filename}'
-        model_blob = storage_client.get_bucket(bucket_name).blob(model_filename)
+        model_blob = storage_client.get_bucket(bucket_name).blob( 'models/' + model_filename)
         model_blob.download_to_filename(temp_model_path)
 
         # Load the model from the H5 file
@@ -48,7 +46,7 @@ class PredictResource(Resource):
 
         # Download the image file to a temporary location
         temp_image_path = f'/tmp/{image_filename}'
-        blob = storage_client.get_bucket(images_bucket_name).blob(image_filename)
+        blob = storage_client.get_bucket(bucket_name).blob('images/' + image_filename)
         blob.download_to_filename(temp_image_path)
         
         # Load the image and preprocess it
