@@ -17,9 +17,10 @@ async function uploadToBucket(file) {
   try {
     const bucketName = process.env.BUCKET_NAME; 
     const uniqueFilename = `${Date.now()}_${file.originalname}`;
+    const destinationPath = `images/${uniqueFilename}`; // Specify the directory within the bucket
 
     const bucket = storage.bucket(bucketName);
-    const fileBlob = bucket.file(uniqueFilename);
+    const fileBlob = bucket.file(destinationPath);
 
     await fileBlob.save(file.buffer, {
       metadata: {
