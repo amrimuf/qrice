@@ -48,7 +48,7 @@ async function callPredictionAPI(model, imageFilename) {
     // predictionResult not only prediction name, but also performance 
     // only for riceDisease
 
-    const response = await axios.post('http://localhost:https://q-rice.et.r.appspot.com/', payload);
+    const response = await axios.post('https://q-rice.et.r.appspot.com/', payload);
     predictionResult = response.data.prediction;
 
     return predictionResult;
