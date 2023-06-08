@@ -7,7 +7,7 @@ automatic_scaling:
   min_idle_instances: 0
   max_idle_instances: 0
   cpu_utilization:
-    target_utilization: 0.6
+    target_utilization: 0.9
   cool_down_period_sec: 180
   target_concurrent_requests: 100
   

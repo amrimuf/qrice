@@ -26,6 +26,8 @@ class PredictResource(Resource):
             model_filename = 'model-nutrient-deficiency.h5'
         elif model_name == 'riceVariety':
             model_filename = 'model-rice-variety.h5'
+        elif model_name == 'seedQuality':
+            model_filename = 'model-seed-quality.h5'
         else:
             return jsonify({'error': 'Invalid model name'})
 
@@ -63,7 +65,8 @@ class PredictResource(Resource):
         class_labels = {
             'riceDisease': ['Bacterial Leaf Blight', 'Brown Spot', 'Healthy', 'Leaf Blast', 'Leaf Scald', 'Narrow Brown Spot'],
             'nutrientDeficiency': ['Nitrogen', 'Phosphorus', 'Potassium'],
-            'riceVariety': ['Arborio', 'Basmati', 'Ipsala', 'Jasmine', 'Karacadag']
+            'riceVariety': ['Arborio', 'Basmati', 'Ipsala', 'Jasmine', 'Karacadag'],
+            'seedQuality': ['Healthy', 'Unhealthy']
         }
         class_labels = class_labels.get(model_name)
         if class_labels is None:
