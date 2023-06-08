@@ -1,5 +1,5 @@
 const { predictionService } = require('../services/predictionService');
-const RiceVarietyPredictionHistory = require('../models/riceVarietyPredictionHistory');
+const RiceVarietyPredictionHistory = require('../models/seedQualityPredictionHistory');
 const RiceDiseasePredictionHistory = require('../models/riceDiseasePredictionHistory');
 const NutrientDeficiencyPredictionHistory = require('../models/nutrientDeficiencyPredictionHistory');
 
@@ -30,7 +30,7 @@ async function predict(req, res) {
       const { model } = req.body;
 
         // Validate the model value
-        const validModels = ['riceVariety', 'nutrientDeficiency', 'riceDisease'];
+        const validModels = ['riceVariety', 'nutrientDeficiency', 'riceDisease', 'seedQuality'];
         if (!validModels.includes(model)) {
           return res.status(400).json({ error: 'Invalid model value.' });
         }

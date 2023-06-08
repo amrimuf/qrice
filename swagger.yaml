@@ -109,6 +109,7 @@ paths:
                     - riceDisease
                     - nutrientDeficiency
                     - riceVariety
+                    - seedQuality
 
       responses:
         '200':

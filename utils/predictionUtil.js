@@ -4,9 +4,11 @@ const sequelize = require('../config/database');
 const RiceVarieties = require('../models/riceVariety')
 const RiceDiseases = require('../models/riceDisease')
 const NutrientDeficiencies = require('../models/nutrientDeficiency')
-const RiceVarietyPredictionHistory = require('../models/riceVarietyPredictionHistory');
+const SeedQuality = require('../models/seedQuality');
+const RiceVarietyPredictionHistory = require('../models/seedQualityPredictionHistory');
 const RiceDiseasePredictionHistory = require('../models/riceDiseasePredictionHistory');
 const NutrientDeficiencyPredictionHistory = require('../models/nutrientDeficiencyPredictionHistory');
+const SeedQualityPredictionHistory = require('../models/seedQualityPredictionHistory');
 
 require('dotenv').config();
 
@@ -46,7 +48,7 @@ async function callPredictionAPI(model, imageFilename) {
     // predictionResult not only prediction name, but also performance 
     // only for riceDisease
 
-    const response = await axios.post('https://q-rice.et.r.appspot.com/', payload);
+    const response = await axios.post('http://localhost:https://q-rice.et.r.appspot.com/', payload);
     predictionResult = response.data.prediction;
 
     return predictionResult;
@@ -92,6 +94,17 @@ async function saveToDatabase(model, userId, imageFilename, predictionResult) {
       history = await RiceDiseasePredictionHistory.create({
         userId,
         rice_disease_id: riceDisease.id,
+        imageFilename,
+        predictionResult,
+      });
+    } else if (model === 'seedQuality') {
+      const seedQuality = await SeedQuality.findOne({
+        where: { name: predictionResult },
+      });
+
+      history = await SeedQualityPredictionHistory.create({
+        userId,
+        seed_quality_id: seedQuality.id,
         imageFilename,
         predictionResult,
       });

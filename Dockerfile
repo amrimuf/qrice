@@ -13,8 +13,8 @@ CMD [ "npm", "start" ]
 
 RUN npm install -g sequelize-cli
 
-# Set the environment variable to control seeding during migration
-ENV RUN_SEED=false
+# ⚠️Set the environment variable to control seeding during migration
+ENV RUN_SEED=true
 
 RUN sequelize db:migrate
 RUN sequelize db:seed:all
