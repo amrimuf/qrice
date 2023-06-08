@@ -13,6 +13,7 @@ async function predictionService(file, model, userId) {
     const result = await saveToDatabase(model, userId, imageFilename, predictionResult);
 
     return result
+    
   } catch (error) {
     return { error: error.message };
   }

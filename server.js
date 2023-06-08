@@ -1,5 +1,5 @@
 const express = require('express');
-var cors = require('cors')
+var cors = require('cors');
 const app = express();
 const riceVarietyRoutes = require('./routes/riceVarietyRoutes');
 const riceDiseaseRoutes = require('./routes/riceDiseaseRoutes');
