@@ -24,11 +24,7 @@ async function uploadToBucket(file) {
     const bucket = storage.bucket(bucketName);
     const fileBlob = bucket.file(destinationPath);
 
-    await fileBlob.save(file.buffer, {
-      metadata: {
-        contentType: file.mimetype,
-      },
-    });
+    await fileBlob.save(file.buffer);
 
     return uniqueFilename;
   } catch (error) {
