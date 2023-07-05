@@ -1,9 +1,13 @@
 steps:
   - name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: 'bash'
     args:
-      - 'cp'
-      - 'gs://q-rice/.env'
-      - './.env'
+      - '-c'
+      - |
+        if gsutil -q stat gs://q-rice/.env; then
+          rm -f ./.env
+          gsutil cp gs://q-rice/.env ./.env
+        fi
 
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
