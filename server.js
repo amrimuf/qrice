@@ -11,7 +11,7 @@ const predictionRoutes = require('./routes/predictionRoutes');
 const swaggerUi = require('swagger-ui-express');
 const yaml = require('js-yaml');
 const fs = require('fs');
-
+const sequelize = require('./config/database');
 app.use(cors())
 app.use(express.json());
 
@@ -34,4 +34,12 @@ const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
+    sequelize
+        .authenticate()
+        .then(() => {
+            console.log('Connection has been established successfully.');
+        })
+        .catch((err) => {
+            console.log('Unable to connect to the database:', err);
+        });
 });
