@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 service-account-key.json
+=======
+.env
+node_modules/
+service-account-key.json
+>>>>>>> origin/main

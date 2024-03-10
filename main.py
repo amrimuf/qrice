@@ -31,26 +31,32 @@ class PredictResource(Resource):
         else:
             return jsonify({'error': 'Invalid model name'})
 
-        # Create a client for interacting with the GCS API
-        storage_client = storage.Client.from_service_account_json('./service-account-key.json')
+        if os.path.exists('../models'):
+            temp_model_path = '../models/' + model_filename
+        else:
+            # Create a client for interacting with the GCS API
+            storage_client = storage.Client.from_service_account_json('./service-account-key.json')
 
-        # Create the directory if it doesn't exist
-        os.makedirs('/tmp/', exist_ok=True)
+            # Create the directory if it doesn't exist
+            os.makedirs('/tmp/', exist_ok=True)
 
-        # Download the model file to a temporary location
-        temp_model_path = f'/tmp/{model_filename}'
-        model_blob = storage_client.get_bucket(bucket_name).blob( 'models/' + model_filename)
-        model_blob.download_to_filename(temp_model_path)
+            # Download the model file to a temporary location
+            temp_model_path = f'/tmp/{model_filename}'
+            model_blob = storage_client.get_bucket(bucket_name).blob( 'models/' + model_filename)
+            model_blob.download_to_filename(temp_model_path)
 
         # Load the model from the H5 file
         model = keras.models.load_model(temp_model_path, compile=False)
         model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-        # Download the image file to a temporary location
-        temp_image_path = f'/tmp/{image_filename}'
-        blob = storage_client.get_bucket(bucket_name).blob('images/' + image_filename)
-        blob.download_to_filename(temp_image_path)
         
+        if os.path.exists('../images'):
+            temp_image_path = '../images/' + image_filename
+        else: 
+            # Download the image file to a temporary location
+            temp_image_path = f'/tmp/{image_filename}'
+            blob = storage_client.get_bucket(bucket_name).blob('images/' + image_filename)
+            blob.download_to_filename(temp_image_path)
+            
         # Load the image and preprocess it
         img = Image.open(temp_image_path)
         img = img.resize((250, 250))  # Resize the image to match the expected input shape
