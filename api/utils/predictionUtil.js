@@ -9,6 +9,8 @@ const RiceVarietyPredictionHistory = require('../models/riceVarietyPredictionHis
 const RiceDiseasePredictionHistory = require('../models/riceDiseasePredictionHistory');
 const NutrientDeficiencyPredictionHistory = require('../models/nutrientDeficiencyPredictionHistory');
 const SeedQualityPredictionHistory = require('../models/seedQualityPredictionHistory');
+const fs = require('fs');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -27,8 +29,13 @@ async function uploadToBucket(file) {
       
       await fileBlob.save(file.buffer);
     } else {
-      const fs = require('fs');
-      const localFilePath = `../images/${uniqueFilename}`;
+      const imagesDir = '../images';
+
+      if (!fs.existsSync(imagesDir)) {
+          fs.mkdirSync(imagesDir);
+      }
+
+      const localFilePath = `${imagesDir}/${uniqueFilename}`;
       
       fs.writeFileSync(localFilePath, file.buffer);
     }

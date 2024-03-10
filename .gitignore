@@ -1,4 +1,5 @@
 *.h5
 .env
 node_modules/
+images/
 service-account-key.json
