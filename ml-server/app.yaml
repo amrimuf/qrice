@@ -1,0 +1,16 @@
+runtime: custom
+env: flex
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 1
+  min_idle_instances: 0
+  max_idle_instances: 0
+  cpu_utilization:
+    target_utilization: 0.9
+  cool_down_period_sec: 180
+  target_concurrent_requests: 100
+  
+resources:
+  cpu: 0.1
+  memory_gb: 1

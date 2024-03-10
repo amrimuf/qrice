@@ -1,0 +1,356 @@
+openapi: 3.0.0
+info:
+  title: Q-RICE API
+  version: 1.0.0
+
+tags:
+  - name: Users
+    description: User management operations
+  - name: ML
+    description: Machine learning operations
+  - name: Diseases
+    description: Rice disease operations
+  - name: Varieties
+    description: Rice variety operations
+  - name: Deficiencies
+    description: Nutrient deficiency operations
+
+paths:
+  /api/register:
+    post:
+      tags:
+        - Users
+      summary: User Registration
+      description: Registers a new user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful registration
+        '400':
+          description: Invalid request payload
+    
+  /api/login:
+    post:
+      tags:
+        - Users
+      summary: User Login
+      description: Authenticates the user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+        '401':
+          description: Unauthorized
+    
+  /api/admin/users:
+    get:
+      tags:
+        - Users
+      summary: Get Users (Admin)
+      description: Retrieves a list of users (admin only).
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+        '403':
+          description: Access denied
+  
+  /api/predict:
+    post:
+      tags:
+          - ML
+      summary: Image Prediction
+      description: Predicts using an image.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                model:
+                  type: string
+                  enum:
+                    - riceDisease
+                    - nutrientDeficiency
+                    - riceVariety
+                    - seedQuality
+
+      responses:
+        '200':
+          description: Successful prediction
+        '401':
+          description: Unauthorized
+        '400':
+          description: Invalid request payload
+    get:
+      tags:
+          - ML
+      summary: Get Prediction Histories
+      description: Retrieves the prediction histories.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+
+  /api/rice-varieties:
+    get:
+      tags:
+        - Varieties
+      summary: Get Rice Varieties
+      description: Retrieves a list of rice varieties.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+  
+  /api/rice-diseases:
+    get:
+      tags:
+        - Diseases
+      summary: Get Rice Diseases
+      description: Retrieves a list of rice diseases.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+
+  /api/nutrient-deficiencies:
+    get:
+      tags:
+        - Deficiencies
+      summary: Get Nutrient Deficiencies
+      description: Retrieves a list of nutrient deficiencies.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+
+  /api/admin/rice-varieties:
+    post:
+      tags:
+        - Varieties
+      summary: Create Rice Variety (Admin)
+      description: Creates a new rice variety (admin only).
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Rice variety created successfully
+        '401':
+          description: Unauthorized
+        '400':
+          description: Invalid request payload
+
+  /api/admin/rice-diseases:
+    post:
+      tags:
+        - Diseases
+      summary: Create Rice Disease (Admin)
+      description: Creates a new rice disease (admin only).
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                symptoms:
+                  type: string
+      responses:
+        '201':
+          description: Rice disease created successfully
+        '401':
+          description: Unauthorized
+        '400':
+          description: Invalid request payload
+
+  /api/admin/nutrient-deficiencies:
+    post:
+      tags:
+        - Deficiencies
+      summary: Create Nutrient Deficiency (Admin)
+      description: Creates a new nutrient deficiency (admin only).
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                symptoms:
+                  type: string
+      responses:
+        '201':
+          description: Nutrient deficiency created successfully
+        '401':
+          description: Unauthorized
+        '400':
+          description: Invalid request payload
+
+  /api/logout:
+    post:
+      tags:
+        - Users
+      summary: User Logout
+      description: Logs out the user.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful logout
+        '401':
+          description: Unauthorized
+
+  /api/rice-diseases/{id}:
+    get:
+      tags:
+        - Diseases
+      summary: Get rice disease by ID
+      description: Retrieves a rice disease based on the provided ID.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of the rice disease to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+
+  /api/rice-varieties/{id}:
+    get:
+      tags:
+        - Varieties
+      summary: Get rice variety by ID
+      description: Retrieves a rice variety based on the provided ID.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of the rice variety to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+
+  /api/nutrient-deficiencies/{id}:
+    get:
+      tags:
+        - Deficiencies
+      summary: Get nutrient deficiency by ID
+      description: Retrieves a nutrient deficiency based on the provided ID.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of the nutrient deficiency to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+    
+  /api/users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user by ID
+      description: Retrieves a user based on the provided ID.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of the userto retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
