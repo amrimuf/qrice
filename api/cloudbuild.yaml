@@ -1,7 +1,5 @@
 steps:
   - name: 'gcr.io/cloud-builders/gsutil'
-<<<<<<< HEAD
-=======
     entrypoint: 'bash'
     args:
       - '-c'
@@ -12,7 +10,6 @@ steps:
         fi
 
   - name: 'gcr.io/cloud-builders/gsutil'
->>>>>>> origin/main
     args:
       - 'cp'
       - 'gs://q-rice/service-account-key.json'
@@ -21,21 +18,13 @@ steps:
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 
-<<<<<<< HEAD
-           'asia-southeast2-docker.pkg.dev/q-rice/q-rice-repo/ml-image:$SHORT_SHA', 
-=======
            'asia-southeast2-docker.pkg.dev/q-rice/q-rice-repo/q-rice-image:$SHORT_SHA', 
->>>>>>> origin/main
            '.']
     
     # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 
-<<<<<<< HEAD
-           'asia-southeast2-docker.pkg.dev/q-rice/q-rice-repo/ml-image:$SHORT_SHA']
-=======
            'asia-southeast2-docker.pkg.dev/q-rice/q-rice-repo/q-rice-image:$SHORT_SHA']
->>>>>>> origin/main
 
   # Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -44,19 +33,11 @@ steps:
       - 'deploy'
       - 'q-rice'
       - '--image'
-<<<<<<< HEAD
-      - 'asia-southeast2-docker.pkg.dev/q-rice/q-rice-repo/ml-image:$SHORT_SHA'
-=======
       - 'asia-southeast2-docker.pkg.dev/q-rice/q-rice-repo/q-rice-image:$SHORT_SHA'
->>>>>>> origin/main
       - '--region'
       - 'us-central1'
       - '--platform'
       - 'managed'
 
 options:
-<<<<<<< HEAD
   logging: CLOUD_LOGGING_ONLY
-=======
-  logging: CLOUD_LOGGING_ONLY
->>>>>>> origin/main

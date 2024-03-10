@@ -2,11 +2,6 @@ openapi: 3.0.0
 info:
   title: Q-RICE API
   version: 1.0.0
-servers:
-  - url: https://q-rice-3ol5bv6txa-uc.a.run.app/
-    description: Production server
-  - url: http://localhost:8080
-    description: Local development server
 
 tags:
   - name: Users

@@ -21,10 +21,17 @@ async function uploadToBucket(file) {
     const uniqueFilename = `${Date.now()}_${file.originalname}`;
     const destinationPath = `images/${uniqueFilename}`; // Specify the directory within the bucket
 
-    const bucket = storage.bucket(bucketName);
-    const fileBlob = bucket.file(destinationPath);
-
-    await fileBlob.save(file.buffer);
+    if (bucketName) {
+      const bucket = storage.bucket(bucketName);
+      const fileBlob = bucket.file(destinationPath);
+      
+      await fileBlob.save(file.buffer);
+    } else {
+      const fs = require('fs');
+      const localFilePath = `../images/${uniqueFilename}`;
+      
+      fs.writeFileSync(localFilePath, file.buffer);
+    }
 
     return uniqueFilename;
   } catch (error) {
@@ -44,7 +51,7 @@ async function callPredictionAPI(model, imageFilename) {
     // predictionResult not only prediction name, but also performance 
     // only for riceDisease
 
-    const response = await axios.post('https://ml-image-3ol5bv6txa-uc.a.run.app/', payload);
+    const response = await axios.post(process.env.MACHINE_LEARNING_SERVER, payload);
     predictionResult = response.data.prediction;
 
     return predictionResult;
