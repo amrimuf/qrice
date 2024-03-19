@@ -47,3 +47,5 @@ Run the API server in development mode, use:
 ```bash 
 npm run dev
 ```
+## GCP Architecture
+![GCP](architecture.png)
